@@ -13,6 +13,7 @@
     - HTTP 의 문제점들
     - DNS Round Robin 방식
     - 웹 통신의 큰 흐름
+3. 티맥스 클라우드 교육 TIL
 
 ### 폴더명 및 브랜치명 규칙
 1. 스프링 스터디
@@ -22,7 +23,7 @@
     - CS/NETWORK/KKC/\*\*
     - CS/NETWORK/YJW/\*\*
 
-3. 티맥스 클라우드 강의 TIL
+3. 티맥스 클라우드 교육 TIL
     - K8S/KKC/\*\*
     - K8S/YJW/\*\*
 
