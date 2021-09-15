@@ -22,3 +22,7 @@
     - CS/NETWORK/KKC/\*\*
     - CS/NETWORK/YJW/\*\*
 
+3. 티맥스 클라우드 강의 TIL
+    - K8S/KKC/\*\*
+    - K8S/YJW/\*\*
+
