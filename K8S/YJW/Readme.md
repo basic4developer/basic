@@ -114,6 +114,8 @@ spec:
 - label을 활용한 pod 관리
 ![Kubernetes Design](./img/label.png)
 
+<br>
+
 - pod_demo.yml
 ```
 apiVersion: v1
