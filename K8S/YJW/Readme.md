@@ -162,11 +162,11 @@ spec:
 
 ### Command
 - Pod 정보
-> kubectl get pods
+> kubectl get pods\
 
-> kubectl get pods -o wide
+> kubectl get pods -o wide\
 
-> kubectl describe pod [name]
+> kubectl describe pod [name]\
 
 > kubectl get services
 
