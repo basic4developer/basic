@@ -161,19 +161,25 @@ spec:
 ### Command
 - Pod 정보
 > kubectl get pods
+
 > kubectl get pods -o wide
+
 > kubectl describe pod [name]
+
 > kubectl get services
 
 - location, type
 > kubectl get pods -l type=db
+
 > kubectl get pods -l lo=production
 
 <br>
 
 - Service 수정
 > kubectl edit service [name]
+
 > clusterIP: 클러스터 내부 통신
+
 > NodePort: 클러스터 외부 통신
 
 <br>
