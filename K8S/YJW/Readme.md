@@ -114,6 +114,8 @@ spec:
 - label을 활용한 pod 관리
 ![Kubernetes Design](./img/label.png)
 
+<br>
+
 - pod_demo.yml
 ```
 apiVersion: v1
@@ -160,21 +162,27 @@ spec:
 
 ### Command
 - Pod 정보
-> kubectl get pods
-> kubectl get pods -o wide
-> kubectl describe pod [name]
+> kubectl get pods\
+
+> kubectl get pods -o wide\
+
+> kubectl describe pod [name]\
+
 > kubectl get services
 
 - location, type
-> kubectl get pods -l type=db
-> kubectl get pods -l lo=production
+> kubectl get pods -l type=db\
+
+> kubectl get pods -l lo=production\
 
 <br>
 
 - Service 수정
-> kubectl edit service [name]
-> clusterIP: 클러스터 내부 통신
-> NodePort: 클러스터 외부 통신
+> kubectl edit service [name]\
+
+> clusterIP: 클러스터 내부 통신\
+
+> NodePort: 클러스터 외부 통신\
 
 <br>
 
@@ -186,7 +194,7 @@ spec:
 <br>
 
 - Scale
-> kubectl scale deployment [name] --replicas=[number]
+> kubectl scale deployment [name]--replicas=[number]
 
 <br>
 
