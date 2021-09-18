@@ -86,3 +86,60 @@ public class AppConfig {
     - 스프링 컨테이너를 통해서 필요한 스프링 빈(객체)를 찾아야한다. 스프링 빈은 applicationContext.getBean() 메서드를 사용해서 찾을 수 있다.
 
 ### 스프링 컨테이너와 스프링 빈
+
+- ApplicationContext JUnit Test
+```
+AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
+
+    @Test
+    @DisplayName("모든 빈 출력하기")
+    void findAllBean(){
+        String[] beanDefinitionNames = ac.getBeanDefinitionNames();
+        for(String beanDifinitionName : beanDefinitionNames){
+            Object bean = ac.getBean(beanDifinitionName);
+            System.out.println("name= "+ beanDifinitionName + " object = "+ bean);
+        }
+    }
+
+    @Test
+    @DisplayName("애플리케이션 빈 출력하기")
+    void findApplicationBean(){
+        String[] beanDefinitionNames = ac.getBeanDefinitionNames();
+        for(String beanDifinitionName : beanDefinitionNames){
+            BeanDefinition beanDefinition = ac.getBeanDefinition(beanDifinitionName);
+
+            //Role ROLA_APPLICATION: 직접 등록한 애플리케이션 빈
+            //Role ROLA_INFRASTRUCTURE: 스프링 내부에서 사용하는 빈
+            if(beanDefinition.getRole() == BeanDefinition.ROLE_APPLICATION){
+                Object bean = ac.getBean(beanDifinitionName);
+                System.out.println("name= "+ beanDifinitionName + " object = "+ bean);
+            }
+        }
+    }
+```
+
+<br>
+
+- 스프링 빈 조회 - 상속관계
+    - 부모 타입으로 조회하면, 자식 타입도 함께 조회한다.
+    - 모든 자바 객체의 최고 부모인 object 타입으로 조회하면 모든 스프링 빈을 조회한다.
+
+- BeanFactory
+    - 스프링 컨테이너의 최상위 인터페이스
+    - 스프링 빈을 관리하고 조회하는 역할을 담당
+    - getBean()을 제공한다.
+    - 사용했던 대부분의 기능은 BeanFactory가 제공하는 기능이다.
+
+- ApplicationContext
+    - BeanFactory 기능을 모두 상속받아서 제공한다.
+    - 빈을 관리하고 검색하는 기능을 BeanFactory가 제공해주는데, 둘의 차이는?
+    - 애플리케이션을 개발할 때는 빈은 관리하고 조회하는 기능은 물론이고, 수많은 부가기능이 필요하다.
+
+### 스프링 빈 설정 메타 정보 - BeanDefinition
+- 역할과 구현을 개념적으로 나눈것
+    - XML을 읽어서 BeanDefinition을 만들면 된다.
+    - 자바 코드를 읽어서 BeanDefinition을 만들면 된다.
+    - 스프링 컨테이너는 자바 코드인지, XML인지 몰라도 된다. 오직 BeanDefinition만 알면 된다.
+- BeanDefinition을 빈 설정 메타정보라 한다.
+    - @Bean, \<bean> 당 각각 하니씩 메타 정보가 생성
+- 스프링 컨테이너는 이 메타정보를 기반으로 스프링 빈을 생성한다. 
