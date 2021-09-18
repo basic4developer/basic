@@ -84,3 +84,5 @@ public class AppConfig {
     - 스프링 컨테이너는 @Configuration이 붙은 AppConfig를 구성(설정)정보로 사용한다.
     - @Bean이라 적힌 메서드를 모두 호출해서 반환된 객체를 스프링 컨테이너에 등록한다.
     - 스프링 컨테이너를 통해서 필요한 스프링 빈(객체)를 찾아야한다. 스프링 빈은 applicationContext.getBean() 메서드를 사용해서 찾을 수 있다.
+
+### 스프링 컨테이너와 스프링 빈
