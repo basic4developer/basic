@@ -7,3 +7,10 @@
     4. 대시보드 설치 및 사용
     5. pod 및 service 생성
     6. 실습
+
+2. 쿠버네티스 복습 및 VirtualBox & Vagrant 실습
+    1. 복습
+    2. VirtualBox & Vagrant를 이용한 k8s 실습
+        1. 실습 구조 및 기초
+        2. 실습을 환경 셋팅
+    3. 실습 p33-37
