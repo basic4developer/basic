@@ -2,6 +2,7 @@
 
 ## 규칙
 - 최소 이틀에 한 번은 PR
+- 질문 및 더 알아보기는 이슈 등록
 
 ## 2021/09/16~2021/09/19
 1. [스프링 핵심 원리 - 기본편](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-%ED%95%B5%EC%8B%AC-%EC%9B%90%EB%A6%AC-%EA%B8%B0%EB%B3%B8%ED%8E%B8) (필수)
