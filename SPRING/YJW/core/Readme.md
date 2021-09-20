@@ -142,4 +142,90 @@ AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(A
     - 스프링 컨테이너는 자바 코드인지, XML인지 몰라도 된다. 오직 BeanDefinition만 알면 된다.
 - BeanDefinition을 빈 설정 메타정보라 한다.
     - @Bean, \<bean> 당 각각 하니씩 메타 정보가 생성
-- 스프링 컨테이너는 이 메타정보를 기반으로 스프링 빈을 생성한다. 
+- 스프링 컨테이너는 이 메타정보를 기반으로 스프링 빈을 생성한다.
+
+### 싱글톤 컨테이너(패턴)
+- 클래스의 인스턴스가 딱 1개만 생성되는 것을 보장하는 디자인 패턴
+```
+public class SingletonTest {
+
+    @Test
+    @DisplayName("스프링 없는 순수한 DI 컨테이너")
+    void pureContainer(){
+        AppConfig appConfig = new AppConfig();
+        //1. 조회: 호출할 때 마다 객체를 생성
+        MemberService memberService1 = appConfig.memberService();
+
+        //2. 조회: 호출할 때 마다 객체를 생성
+        MemberService memberService2 = appConfig.memberService();
+
+        //참조값이 다른 것을 확인
+        System.out.println("memberService1 = "+ memberService1);
+        System.out.println("memberService2 = "+ memberService2);
+
+        Assertions.assertThat(memberService1).isNotSameAs(memberService2);
+    }
+}
+```
+- 스프링이 없는 순수한 DI컨테이너인 AppConfig는 요청을 할 때 마다 객체를 새로 생성한다. -> 메모리 낭비가 심하다
+- 해결방안은 해당 객체가 딱 1개만 생성되고, 공유하도록 설계하면 된다. -> 싱글톤 패턴
+
+```
+public class SingletonService {
+    private static final SingletonService instance = new SingletonService();
+
+    public static SingletonService getInstance(){
+        return instance;
+    }
+
+    //private 생성자로 인스턴스 하나만 생성할 수 있도록 한다.
+    //이 객체 인스턴스가 필요하면 오직 getInstance() 메서드를 통해서만 조회할 수 있다.
+    //private으로 막아서 혹시라도 외부에서 new 키워드로 객체 인스턴스가 생성되는 것을 막는다.
+    private SingletonService(){
+
+    }
+
+    public void logic(){
+        System.out.println("싱글톤 객체 로직 호출");
+    }
+}
+
+    @Test
+    @DisplayName("싱글톤 패턴을 적용한 객체 사용")
+    void singletonServiceTest(){
+        SingletonService singletonService1 =  SingletonService.getInstance();
+        SingletonService singletonService2 =  SingletonService.getInstance();
+
+        //같은 객체 참조
+        System.out.println("singletonService1 = "+ singletonService1);
+        System.out.println("singletonService2 = "+ singletonService2);
+
+        assertThat(singletonService1).isSameAs(singletonService2);
+    }
+
+    @Test
+    @DisplayName("스프링 컨테이너와 싱글톤")
+    void springContainer(){
+        ApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
+
+        MemberService memberService1 = ac.getBean("memberService", MemberService.class);
+        MemberService memberService2 = ac.getBean("memberService", MemberService.class);
+
+        //참조값이 다른 것을 확인
+        System.out.println("memberService1 = "+ memberService1);
+        System.out.println("memberService2 = "+ memberService2);
+
+        assertThat(memberService1).isSameAs(memberService2);
+    }
+```
+
+<br>
+
+### 싱글통 방식의 주의점
+- 객체 인스턴스를 하나만 생성해서 공유하는 싱글톤 방식은 여러 클라이언트가 하나의 같은 객체 인스턴스를 공유하기 때문에 싱글톤 객체는 상태를 유지(stateful)하게 설계하면 안된다.
+- 무상태(stateless)로 설계해야 한다.
+    - 특정 클라이언트에 의존적인 필드가 있으면 안된다.
+    - 특정 클라이언트가 값을 변경할 수 있는 필드가 있으면 안된다.
+    - 가급적 읽기만 가능해야 한다.
+    - 필드 대신에 자바에서 공유되지 않는, 지역변수, 파라미터, ThreadLocal 등을 사용해야 한다.
+- 스프링 빈의 필드에 공유 값을 설정하면 큰 장애가 발생 할 수 있다.
