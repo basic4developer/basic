@@ -305,3 +305,50 @@ public class SingletonService {
     }
 ```
 
+<br>
+
+### 빈 생명주기 콜백
+
+1. 스프링 컨테이너 생성
+2. 스프링 빈 생성
+3. 의존관계 주입
+4. 초기화 콜백
+5. 사용
+6. 소멸 전 콜백
+7. 스프링 종료
+
+- 객체의 생성과 초기화를 분리하자.
+```
+첫번째 방법
+implements InitializingBean, DisposableBean
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        connect();
+        call("초기화 연결 메시지");
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        disconnect();
+    }
+
+두번째 방법
+@Bean(initMethod = "init", destroyMethod = "close")
+
+public void init() {
+        System.out.println("NetworkClient.init");
+        connect();
+        call("초기화 연결 메시지");
+    }
+
+    public void close() {
+        System.out.println("NetworkClient.close");
+        disconnect();
+    }
+
+세번째 방법
+@PostConstruct, @PreDestroy
+```
+
+
