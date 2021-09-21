@@ -349,6 +349,7 @@ public void init() {
 
 세번째 방법
 @PostConstruct, @PreDestroy
+
 ```
 
 ### 프로토타입 스코프(@Prototype)
@@ -360,3 +361,6 @@ public void init() {
 - <b>session</b>: HTTP Session과 동일한 생명주기를 가지는 스코프
 - <b>application</b>: 서블릿 컨텍스트와 동일한 생명주기를 가지는 스코프
 - <b>websocket</b>: 웹 소켓과 동일한 생명주기를 가지는 스코프
+=======
+```
+
