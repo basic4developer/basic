@@ -350,5 +350,3 @@ public void init() {
 세번째 방법
 @PostConstruct, @PreDestroy
 ```
-
-
