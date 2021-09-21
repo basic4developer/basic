@@ -239,3 +239,69 @@ public class SingletonService {
 - @Component: bean으로 등록하고자하는 class에 선언!
 - @Autowired: 생성자에서 여러 의존관계도 한번에 주입받을 수 있다.
 - @ComponentScan: @Component가 붙은 모든 클래스를 스프링 빈으로 등록한다.
+
+### 의존관계 주입 방법
+- 생성자 주입: 생성자에 @Autowired
+    - 생성자 호출시점에 딱 1번만 호둘되는 것이 보장된다.
+    - "불편, 필수" 의존관계
+```
+    @Autowired
+    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }
+```
+- 수정자 주입(setter 주입)
+    - "선택, 변경" 가능성이 있는 의존관계에 사용
+```
+    @Autowired
+    public void setMemberRepository(MemberRepository memberRepository) {
+        System.out.println("OrderServiceImpl.setMemberRepository"+memberRepository);
+        this.memberRepository = memberRepository;
+    }
+```
+- 필드 주입
+    - 권장 사항이 아님!(사용하지 말자)
+```
+    @Autowired
+    private MemberRepository memberRepository;
+```
+- 일반 메서드 주입
+    - 한번에 여러 필드를 주입 받을 수 있다.
+    - 일반적으로 잘 사용하지 않는다.
+```
+    @Autowired
+    public void init(MemberRepository memberRepository, DiscountPolicy discountPolicy){
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }
+```
+
+<br>
+
+### 옵션 처리
+주입할 스프링 빈이 없어도 동작해야 할 때가 있다.
+```
+    @Test
+    void AutowiredOption(){
+       ApplicationContext ac = new AnnotationConfigApplicationContext(TestBean.class);
+    }
+
+    static class TestBean{
+        @Autowired(required = false)
+        public void setNoBean1(Member noBean1){
+            System.out.println("noBean1 = "+noBean1);
+        }
+
+        @Autowired
+        public void setNoBean2(@Nullable Member noBean2){
+            System.out.println("noBean2 = "+noBean2);
+        }
+
+        @Autowired
+        public void setNoBean3(Optional<Member> noBean3){
+            System.out.println("noBean3 = "+noBean3);
+        }
+    }
+```
+
