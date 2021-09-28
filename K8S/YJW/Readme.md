@@ -170,6 +170,8 @@ spec:
 
 > kubectl get services
 
+> kubectl get pod simple-echo -o yaml
+
 - location, type
 > kubectl get pods -l type=db\
 
@@ -200,4 +202,107 @@ spec:
 
 - yaml 실행, kuber에 오브젝트 반영
 > kubectl apply -f [filename]
+
+<br>
+
+- pod terminating 강제 삭제
+> kubectl delete pod \<PODNAME> --grace-period=0 --force --namespace \<NAMESPACE>
+
+### Kubernetes Deployment
+- 애플리케이션 배포의 기본 단위
+- ReplicaSet을 관리하기 위한 Object
+- ReplicaSet은 버전관리에 어려움이 있기 때문에
+  - deployment를 이용
+
+<br>
+
+- 예제 코드
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo
+  labels:
+    app: echo
+spec:
+  # 케이스에 따라 레플리카를 수정한다.
+  replicas: 4
+  selector:
+    matchLabels:
+      app: echo
+  template:
+    metadata:
+      labels:
+        app: echo
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        env:
+        - name: BACKEND_HOST
+          value: localhost:8080
+        ports:
+        - containerPort: 80
+      - name: echo
+        image: gihyodocker/echo:latest
+        env:
+        - name: FRONT_HOST
+          value: localhost:80
+        ports:
+        - containerPort: 8080
+```
+
+- deployment history 관리
+> kubectl rollout history deployment echo
+
+> kubectl apply -f simple-deployment.yml --record
+
+> kubectl get pod,replicaset,deployment --selector app=echo
+
+```
+--record 로 기록 저장 후
+history로 확인결과 아래와 같이 바뀐것을 확인
+
+deployment.apps/echo 
+REVISION  CHANGE-CAUSE
+1         kubectl apply --filename=simple-deployment.yml --record=true
+
+--yml 환경변수 수정 후
+revision이 새로 생긴것을 확인 가능(새로운 버전으로 배포)
+revision을 통해서 이전 버전으로 돌아갈 수 있다
+
+deployment.apps/echo 
+REVISION  CHANGE-CAUSE
+1         kubectl apply --filename=simple-deployment.yml --record=true
+2         kubectl apply --filename=simple-deployment.yml --record=true
+
+--revision 1로 롤백
+kubectl rollout undo deployment echo --to-revision=1
+
+--이미지 업데이트
+kubectl set image deployment echo echo=edowon0623/hello:latest
+```
+
+### kuber - Service
+- cluster 안에서 pod의 집합에 대한 경로나 service discovery를 제공하는 object
+- pod에 접속하기 위한 network endpoint
+- pod는 재생성이 가능하며, 재생성 시 IP는 변경(동적 IP, 불완전 IP)
+- Service는 한번 생성 후 삭제 시키기 전까지는 계속 유지
+- load balancing과 같은 역할을 한다
+- local: nodePort
+- aws: LoadBalancer
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: echo
+spec:
+  selector:
+    app: echo
+  ports:
+    - name: http
+      port: 80
+
+echo-spring 과 echo-summer를 80 포트(외부)에 연결
+```
 
