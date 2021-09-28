@@ -306,3 +306,16 @@ spec:
 echo-spring 과 echo-summer를 80 포트(외부)에 연결
 ```
 
+### ingress
+
+> kubectl get service -n ingress-nginx
+
+> kubectl edit service ingress-nginx-controller -n ingress-nginx
+
+> kubectl get all -o wide
+
+### volumes
+
+> kubectl exec -it simple-echo -c nginx -- bash
+
+> kubectl exec -it simple-echo -c echo -- bash
