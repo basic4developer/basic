@@ -314,6 +314,8 @@ echo-spring 과 echo-summer를 80 포트(외부)에 연결
 
 > kubectl get all -o wide
 
+> kubectl get ingress --all-namespaces
+
 ### volumes
 
 > kubectl exec -it simple-echo -c nginx -- bash
